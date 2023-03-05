@@ -38,6 +38,7 @@ public class SpotifyRepository {
     }
 
     public User createUser(String name, String mobile) {
+        //create the user with given name and number
         User user = new User(name,mobile);
         users.add(user);
         userPlaylistMap.put(user,new ArrayList<>());
@@ -46,6 +47,7 @@ public class SpotifyRepository {
     }
 
     public Artist createArtist(String name) {
+        //create the artist with given name
         Artist artist = new Artist(name);
         artists.add(artist);
         artistAlbumMap.put(artist,new ArrayList<>());
@@ -53,6 +55,8 @@ public class SpotifyRepository {
     }
 
     public Album createAlbum(String title, String artistName) {
+        //If the artist does not exist, first create an artist with given name
+        //Create an album with given title and artist
         Album album = new Album(title);
 
         if(!artists.contains(artistName)){
@@ -66,6 +70,8 @@ public class SpotifyRepository {
     }
 
     public Song createSong(String title, String albumName, int length) throws Exception{
+        //If the album does not exist in database, throw "Album does not exist" exception
+        //Create and add the song to respective album
         Song song = new Song(title,length);
         if(!albumSongMap.containsKey(albumName)){
             throw new Exception("Album does not exist");
@@ -79,6 +85,10 @@ public class SpotifyRepository {
     }
 
     public Playlist createPlaylistOnLength(String mobile, String title, int length) throws Exception {
+        //Create a playlist with given title and add all songs having the given length in the database to that playlist
+        //The creater of the playlist will be the given user and will also be the only listener at the time of playlist creation
+        //If the user does not exist, throw "User does not exist" exception
+
         Playlist playlist = new Playlist(title);
         playlists.add(playlist);
         //user check
@@ -111,8 +121,8 @@ public class SpotifyRepository {
                 lt.add(user);
                 playlistListenerMap.put(playlist,lt);
             }
-        }
            return playlist;
+        }
     }
 
     public Playlist createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
@@ -151,11 +161,12 @@ public class SpotifyRepository {
                 lt.add(user);
                 playlistListenerMap.put(playlist,lt);
             }
+
+            playlists.add(playlist);
+
+            return playlist;
         }
 
-        playlists.add(playlist);
-
-        return playlist;
     }
 
     public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
@@ -200,8 +211,8 @@ public class SpotifyRepository {
                     playlistListenerMap.put(playlist,l);
                 }
             }
-        }
             return playlist;
+        }
     }
 
     public Song likeSong(String mobile, String songTitle) throws Exception {
