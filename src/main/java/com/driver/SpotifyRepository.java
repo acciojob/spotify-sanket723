@@ -45,6 +45,7 @@ public class SpotifyRepository {
 //        userPlaylistMap.put(user,new ArrayList<>());
 //        creatorPlaylistMap.put(user,new Playlist());
 //        return user;
+
         for(User curUser: users){
             if(curUser.getMobile().equals(mobile)){
                 return curUser;
@@ -154,7 +155,6 @@ public class SpotifyRepository {
         //If the user does not exist, throw "User does not exist" exception
 
         Playlist playlist = new Playlist(title);
-        playlists.add(playlist);
         //user check
         User user = null;
         for(User u : users){
@@ -185,7 +185,9 @@ public class SpotifyRepository {
                 lt.add(user);
                 playlistListenerMap.put(playlist,lt);
             }
-           return playlist;
+
+            playlists.add(playlist);
+            return playlist;
         }
     }
 
@@ -194,7 +196,29 @@ public class SpotifyRepository {
         //The creater of the playlist will be the given user and will also be the only listener at the time of playlist creation
         //If the user does not exist, throw "User does not exist" exception
 
-        Playlist playlist =new Playlist(title);
+        ////
+        for(Playlist playlist:playlists){
+            if(playlist.getTitle().equals(title)){
+                return playlist;
+            }
+        }
+
+        Playlist playlist = new Playlist(title);
+        playlists.add(playlist);
+        List<Song> songslist = new ArrayList<>();
+        if(playlistSongMap.containsKey(playlist)){
+            songslist = playlistSongMap.get(playlist);
+        }
+
+        for(Song song:songs){
+            if(songTitles.contains(song.getTitle())){
+                songslist.add(song);
+            }
+        }
+        playlistSongMap.put(playlist,songslist);
+
+        ////
+        //Playlist playlist =new Playlist(title);
         User user = null;
         for(User u : users){
             if(u.getMobile().equals(mobile)){
